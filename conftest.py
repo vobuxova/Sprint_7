@@ -5,16 +5,16 @@ from .courier_generator import register_new_courier_and_return_login_password, d
 
 @pytest.fixture
 def create_courier():
-    courier_data = register_new_courier_and_return_login_password()
-    if not courier_data:
-        pytest.fail("Failed to create courier")
-    
-    login, password, firstName = courier_data
-    payload = {"login": login, "password": password, "firstName": firstName}
+    login, password, first_name = register_new_courier_and_return_login_password()
+    payload = {"login": login, "password": password, "firstName": first_name}
 
     requests.post(Urls.COURIER_ENDPOINT, json=payload)
    
-    yield login, password, firstName
+    yield login, password, first_name
     
-    def delete_courier(courier_id):
-            delete_courier(courier_id)
+    login_payload = {"login": login, "password": password}
+    login_response = requests.post(Urls.COURIER_LOGIN_ENDPOINT, json=login_payload)
+    courier_id = login_response.json().get('id')
+    
+    if courier_id:
+        delete_courier(courier_id)

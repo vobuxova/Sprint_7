@@ -1,7 +1,6 @@
 import requests
-import random
-import string
 import allure
+from ..helpers import Helpers
 from ..data import Urls, Message
 from ..courier_generator import register_new_courier_and_return_login_password, delete_courier
 
@@ -9,15 +8,10 @@ from ..courier_generator import register_new_courier_and_return_login_password, 
 class TestCourier:
     @allure.title("Успешное создание курьера")
     def test_create_courier_success(self):
-        
-        def generate_random_string(length):
-            letters = string.ascii_lowercase
-            random_string = ''.join(random.choice(letters) for i in range(length))
-            return random_string
     
-        login = generate_random_string(10)
-        password = generate_random_string(10)
-        first_name = generate_random_string(10)
+        login = Helpers.generate_random_string(10)
+        password = Helpers.generate_random_string(10)
+        first_name = Helpers.generate_random_string(10)
     
         payload = {
             "login": login,
